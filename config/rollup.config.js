@@ -6,13 +6,13 @@ export default {
   output: [
     {
       format: 'iife',
-      file: 'dist/bundle/topiccarousel.min.js',
+      file: 'dist/bundle/topic-carousel.min.js',
       name: 'TopicCarousel',
       plugins: [terser()],
     },
     {
       format: 'iife',
-      file: 'dist/bundle/topiccarousel.js',
+      file: 'dist/bundle/topic-carousel.js',
       name: 'TopicCarousel',
     },
     {
