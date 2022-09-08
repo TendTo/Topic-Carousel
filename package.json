@@ -1,0 +1,50 @@
+{
+  "name": "topiccarousel",
+  "version": "0.0.1",
+  "description": "Carousel with infinite scroll with the ability to filter items through topics",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "scripts": {
+    "start": "http-server ./public -p 3000",
+    "prepare": "husky install",
+    "test": "npm run test:unit && npm run test:e2e",
+    "pretest:e2e": "rollup -c config/rollup.test.config.js",
+    "test:e2e": "playwright test --config=config/playwright.config.ts tests/e2e",
+    "test:unit": "mocha -r ts-node/register tests/unit --recursive --extension .test.ts --timeout 60000 --exit",
+    "clean": "rimraf dist lib",
+    "build": "rollup -c config/rollup.config.js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "format": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.ts' --write",
+    "lint": "eslint --ext=.tsx,.ts .",
+    "lint-staged": "lint-staged -c config/.lintstagedrc.json"
+  },
+  "keywords": [
+    "browser"
+  ],
+  "author": "TendTo",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.25.2",
+    "@rollup/plugin-typescript": "^8.5.0",
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^9.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "chai": "^4.3.6",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "http-server": "^14.1.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "mocha": "^10.0.0",
+    "prettier": "^2.7.1",
+    "rollup": "^2.79.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.2"
+  }
+}
