@@ -1,15 +1,21 @@
 {
-  "name": "topiccarousel",
+  "name": "topic-carousel",
   "version": "0.0.1",
   "description": "Carousel with infinite scroll with the ability to filter items through topics",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/cjs/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "lib"
+  ],
   "scripts": {
+    "setup:start": "rollup -c config/rollup.test.config.js",
     "start": "http-server ./public -p 3000",
     "prepare": "husky install",
     "test": "npm run test:unit && npm run test:e2e",
-    "pretest:e2e": "rollup -c config/rollup.test.config.js",
+    "pretest:e2e": "npm run setup:start",
     "test:e2e": "playwright test --config=config/playwright.config.ts tests/e2e",
     "test:unit": "mocha -r ts-node/register tests/unit --recursive --extension .test.ts --timeout 60000 --exit",
     "clean": "rimraf dist lib",
