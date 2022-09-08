@@ -10,7 +10,7 @@ describe('Topic', function () {
     const topic = new Topic(name);
     expect(topic.name).to.equal(name);
     expect(topic.isActive).to.be.false;
-    expect(topic.additionalData).to.deep.equal({});
+    expect(topic.additionalData).to.be.undefined;
   });
   it('should have the correct setup with additional data', function () {
     const name = 'name';
