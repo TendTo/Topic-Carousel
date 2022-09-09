@@ -44,6 +44,8 @@ Install the dependencies with
 
 ```bash
 npm install
+# Setup husky
+npm run prepare
 ```
 
 ## Standalone web server
@@ -99,3 +101,40 @@ npm run test:e2e
 
 > ℹ️ The e2e test configuration is located in _config/playwright.config.ts_.
 > Right now, only chromium and firefox are tested, but it is possible to also include safari (see commented section).
+
+## All the scripts
+
+There are all the scripts available in the project.
+They can be called with
+
+```
+npm run <script name>
+```
+
+> ℹ️ The ones beginning with `pre<script name>` or `post<script name>` will run automatically when the `<script name>` is run.
+
+```yaml
+start: |
+  run the typescript entrypoint with ts-node. 
+  May cause errors if any browser specific function is invoked
+serve: start the web server on port 3000
+serve:dev: |
+  start the web server on port 3000 while watching the src folder for changes.
+  To apply them, you will need to refresh the page
+serve:docs: start the web server on port 8080 to take a look at the documentation generated
+watch: watch for changes in the src folder
+prepare: prepare the husky git pre-commit hook
+test: run both unit and end to end tests
+pretest:e2e: make sure the current build is up to date before testing
+test:e2e: run the end to end tests
+test:unit: run the unit tests
+clean: remove both lib and dist folders
+prebuild: make sure the folders are cleared before building
+build: build the package for node (cjs, esm) and browser (single bundle, esm)
+postbuild: generate type bindings
+build:dev: build the project for the local web server
+format: use prettier to format the code
+lint: use eslint to lint the code
+lint-staged: apply linting on the pre-commit hook
+docs: generate the documentation
+```
