@@ -1,11 +1,14 @@
 # TopicCarousel
 
 Carousel with infinite scroll with the ability to filter items through topics.  
-Does not need any dependency.
+Does not rely on any other dependency.
 
-## Use
+> ❗️ This package just started development, it isn't functional right now.
+> Still, feel free to contribuite
 
-Install with npm
+## ▶️ Use
+
+Install the package
 
 ```bash
 npm i topic-carousel
@@ -17,16 +20,43 @@ or include the script directly in your _html_ file with
 <script src="https://unpkg.com/topic-carousel@0.0.1/dist/bundle/topic-carousel.min.js"></script>
 ```
 
-## Development
+## 📖 Documentation
+
+Check the complete documentation [here](https://tendto.github.io/Topic-Carousel/).
+
+## 💻 Development
 
 If you want to improve the package or you are just curious on how it works, follow this section.
 
-### Requirements
+### 🗂 Folders structure
+
+```yaml
+.
+├── .github     # github actions
+├── .husky      # git hooks
+├── config      # configuration files for rollup, lint-staged and playwright
+├── dist        # [AFTER npm run build] built package, to be used in the browser
+├── docs        # [AFTER npm run docs] documentation
+├── lib         # [AFTER npm run build] built package, to be used with node.js
+├── public      # base folder used by the dev web server
+├── src         # source code
+├── tests       # unit and end to end tests
+└── README.md   # THIS FILE
+```
+
+### 🧾 Requirements
 
 - [node.js 14.x](https://nodejs.org/)
 - [npm](https://www.npmjs.com/) (or similar package manager)
 
-### Setup
+#### Notable dev-dependencies
+
+- [typescript](https://www.typescriptlang.org/) to make programming decent
+- [rollup.js](https://rollupjs.org/guide/en/) for building the package
+- [playwright](https://playwright.dev/) for end to end tests
+- [mocha](https://mochajs.org/) for unit tests
+
+### 🔧 Setup
 
 Install the dependencies with
 
@@ -34,7 +64,20 @@ Install the dependencies with
 npm install
 ```
 
-### Build
+### 🌐 Standalone web server
+
+To play around and see for yourself any changes to the library, you can use the integrated web server.
+Just run
+
+```bash
+# Build the package locally and start the web server
+npm run build:dev
+npm start
+# Allows live reload by refreshing the page
+npm run start:dev
+```
+
+### 🧱 Build
 
 Make sure everything is clean by running
 
@@ -48,7 +91,7 @@ then all the versions of the package can be built with the command
 npm run build
 ```
 
-### Tests
+### 🧪 Tests
 
 #### Unit
 
@@ -71,3 +114,6 @@ you can then run
 ```bash
 npm run test:e2e
 ```
+
+> ℹ️ The e2e test configuration is located in _config/playwright.config.ts_.
+> Right now, only chromium and firefox are tested, but it is possible to also include safari (see commented section).
