@@ -1,5 +1,8 @@
 # TopicCarousel
 
+[![npm](https://img.shields.io/badge/topic--carousel-%5E0.0.1-green?logo=npm)](https://www.npmjs.com/package/topic-carousel)
+[]
+
 Carousel with infinite scroll with the ability to filter items through topics.  
 Does not rely on any other dependency.
 
