@@ -54,9 +54,9 @@ Just run
 ```bash
 # Build the package locally and start the web server
 npm run build:dev
-npm start
+npm run serve
 # Allows live reload by refreshing the page
-npm run start:dev
+npm run serve:dev
 ```
 
 ## Build

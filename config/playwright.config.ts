@@ -102,7 +102,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm start',
+    command: 'npm run serve',
     url: baseURL,
   },
 };

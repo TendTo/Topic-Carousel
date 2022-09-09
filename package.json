@@ -19,9 +19,10 @@
     "lib"
   ],
   "scripts": {
-    "start": "http-server ./public -p 3000 -c-1",
-    "start:dev": "concurrently \"npm:watch\" \"npm:start\" ",
-    "start:docs": "http-server ./docs -p 8080 -c-1",
+    "start": "ts-node src/index.ts",
+    "serve": "http-server ./public -p 3000 -c-1",
+    "serve:dev": "concurrently \"npm:watch\" \"npm:serve\" ",
+    "serve:docs": "http-server ./docs -p 8080 -c-1",
     "watch": "rollup -c config/rollup.test.config.js -w",
     "prepare": "husky install",
     "test": "concurrently \"npm:test:*\"",
