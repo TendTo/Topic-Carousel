@@ -12,6 +12,13 @@
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/cjs/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
   "packageManager": "npm@8.19.1",
   "files": [
     "dist",
@@ -37,7 +44,9 @@
     "format": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.ts' --write",
     "lint": "eslint --ext=.tsx,.ts .",
     "lint-staged": "lint-staged -c config/.lintstagedrc.json",
-    "docs": "npx typedoc --options typedoc.json"
+    "docs": "npx typedoc --options typedoc.json",
+    "prepack": "npm run build",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@knodes/typedoc-plugin-pages": "^0.23.1",
