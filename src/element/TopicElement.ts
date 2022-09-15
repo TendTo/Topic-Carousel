@@ -1,6 +1,5 @@
 import { Topic } from '../data/Topic';
 import { TopicList } from '../data/TopicList';
-import { ITopic } from '../interface/ITopic';
 import { BaseElement, ElementOptions } from './BaseElement';
 
 export class TopicElement extends BaseElement implements ITopic {

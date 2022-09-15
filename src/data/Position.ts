@@ -22,7 +22,7 @@ export class Position implements IEventEmitter<PositionEvents> {
   private _position: number;
   private _onTopicChangeCallbacks: OnPositionChangeCallback[] = [];
   public readonly initialPosition: number;
-  private readonly maxPosition: number;
+  public readonly maxPosition: number;
   public readonly loop: boolean;
 
   constructor(maxPosition: number);
@@ -38,9 +38,15 @@ export class Position implements IEventEmitter<PositionEvents> {
     return this._position;
   }
 
+  public set position(position: number) {
+    const prevPosition = this._position;
+    this._position = clamp(position, 0, this.maxPosition);
+    this.onPositionChange(this._position > prevPosition, this._position, prevPosition);
+  }
+
   on<E extends keyof PositionEvents>(event: E, listener: PositionEvents[E]): void {
     switch (event) {
-      case 'onTopicChange':
+      case 'onPositionChange':
         this._onTopicChangeCallbacks.push(listener as OnPositionChangeCallback);
         break;
       default:
@@ -66,7 +72,7 @@ export class Position implements IEventEmitter<PositionEvents> {
     const prevPosition = this._position;
     this._position = this.loop
       ? (this._position + 1) % this.maxPosition
-      : Math.min(this._position + 1, this.maxPosition - 1);
+      : Math.min(this._position + 1, this.maxPosition);
     this.onPositionChange(true, this._position, prevPosition);
   }
 

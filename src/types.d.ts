@@ -15,3 +15,13 @@ interface IEventEmitter<C extends Record<string, CallableFunction>> {
    */
   off<E extends keyof C>(event: E, listener: C[E]): void;
 }
+
+/**
+ * Topic interface
+ */
+interface ITopic {
+  readonly topic: string;
+  additionalData: unknown;
+  isActive: boolean;
+  toggleActive(): void;
+}
