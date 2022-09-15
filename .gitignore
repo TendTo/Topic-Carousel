@@ -134,8 +134,13 @@ dist/
 # Temp files
 temp.*
 /test-results/
-/playwright-report/
-/playwright/.cache/
+
+# Playwright
+playwright-report/
+playwright/.cache/
 
 # Docs
 docs/
+
+# Css
+public/css/

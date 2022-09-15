@@ -13,16 +13,23 @@
         "forceConsistentCasingInFileNames": true,
         "strictFunctionTypes": true,
         "strictBindCallApply": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
         "types": [
             "mocha"
         ],
+        "paths": {
+            "@topic-carousel/*": [
+                "src/*"
+            ]
+        }
     },
     "include": [
-        "src"
+        "src",
+        "tests"
     ],
     "exclude": [
         "node_modules",
-        "test/"
     ],
     "ts-node": {
         "files": true
