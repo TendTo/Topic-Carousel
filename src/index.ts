@@ -1,3 +1,1 @@
-export { TopicList } from './TopicList';
-export { Topic } from './Topic';
-export { TopicButton } from './TopicButton';
+export { TopicCarousel } from './TopicCarousel';

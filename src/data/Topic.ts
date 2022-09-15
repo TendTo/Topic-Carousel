@@ -1,8 +1,8 @@
 export class Topic {
-  constructor(name: string);
-  constructor(name: string, additionalData?: unknown, isActive?: boolean);
+  constructor(id: string);
+  constructor(id: string, additionalData?: unknown, isActive?: boolean);
   constructor(
-    public name: string,
+    public readonly id: string,
     public additionalData: unknown = undefined,
     public isActive: boolean = false,
   ) {}

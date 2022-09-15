@@ -1,22 +1,22 @@
 import { expect } from 'chai';
-import { Topic } from '../../src/Topic';
+import { Topic } from 'topic-carousel/data/Topic.js';
 
 describe('Topic', function () {
   it('should be created', function () {
     expect(new Topic('')).to.be.ok;
   });
   it('should have the correct setup', function () {
-    const name = 'name';
-    const topic = new Topic(name);
-    expect(topic.name).to.equal(name);
+    const id = 'name';
+    const topic = new Topic(id);
+    expect(topic.id).to.equal(id);
     expect(topic.isActive).to.be.false;
     expect(topic.additionalData).to.be.undefined;
   });
   it('should have the correct setup with additional data', function () {
-    const name = 'name';
+    const id = 'name';
     const additionalData = { key: 'value' };
-    const topic = new Topic(name, additionalData);
-    expect(topic.name).to.equal(name);
+    const topic = new Topic(id, additionalData);
+    expect(topic.id).to.equal(id);
     expect(topic.isActive).to.be.false;
     expect(topic.additionalData).to.deep.equal(additionalData);
   });
