@@ -1,7 +1,7 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "name": "Topic-Carousel",
-    "tsconfig": "tsconfig.json",
+    "tsconfig": "config/tsconfig.build.json",
     "entryPoints": [
         "src",
     ],

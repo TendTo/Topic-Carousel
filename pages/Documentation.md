@@ -17,7 +17,7 @@ Inside you will find the generated documentation.
 To visualize the result in the browser, you can use the command
 
 ```bash
-npm run serve:dev
+npm run serve:docs
 ```
 
 ## typedoc configuration
