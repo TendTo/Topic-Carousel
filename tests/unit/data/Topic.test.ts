@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Topic } from 'topic-carousel/data/Topic.js';
+import { Topic } from '@topic-carousel/data';
 
 describe('Topic', function () {
   it('should be created', function () {
