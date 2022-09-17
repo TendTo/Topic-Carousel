@@ -1,46 +1,62 @@
-import { expect, use } from 'chai';
+import { expect } from 'chai';
 import { Position } from '@topic-carousel/data';
 import { spy } from 'sinon';
-import sinonChai from 'sinon-chai';
+import { EventManager } from '@topic-carousel/event';
 
-use(sinonChai);
-
-describe('Topic', function () {
+describe('Position', function () {
   const defaultMaxPos = 10;
+  const initialPosition = defaultMaxPos / 2;
+  let eventManager: EventManager;
+  let position: Position;
+
+  beforeEach(function () {
+    eventManager = new EventManager();
+    position = new Position(eventManager, defaultMaxPos, { initialPosition });
+    eventManager.emit('setup');
+    eventManager.emit('init');
+  });
+
+  afterEach(function () {
+    eventManager.emit('destroy');
+  });
 
   it('should be created', function () {
-    expect(new Position(100)).to.be.ok;
+    expect(new Position(eventManager, 100)).to.be.ok;
   });
+
   it('should have the correct default setup', function () {
-    const position = new Position(defaultMaxPos);
     expect(position.maxPosition).to.equal(defaultMaxPos);
-    expect(position.position).to.equal(0);
-    expect(position.loop).to.be.false;
+    expect(position.position).to.equal(initialPosition);
+    expect(position.loop).to.equal('none');
   });
+
   it('should have the correct setup with custom data', function () {
-    const options = { loop: true, initialPosition: defaultMaxPos / 2 };
-    const position = new Position(defaultMaxPos, options);
+    const loop = 'none';
+    const initialPosition = defaultMaxPos / 2;
+    const position = new Position(eventManager, defaultMaxPos, { loop, initialPosition });
     expect(position.maxPosition).to.equal(defaultMaxPos);
-    expect(position.position).to.equal(options.initialPosition);
-    expect(position.loop).to.equal(options.loop);
+    expect(position.position).to.equal(initialPosition);
+    expect(position.loop).to.equal(loop);
   });
+
   it('should clamp starting position too high', function () {
     const initialPosition = defaultMaxPos + 1;
-    const position = new Position(defaultMaxPos, { initialPosition });
+    const position = new Position(eventManager, defaultMaxPos, { initialPosition });
     expect(position.position).to.equal(defaultMaxPos);
   });
+
   it('should clamp starting position too low', function () {
     const initialPosition = -1;
-    const position = new Position(defaultMaxPos, { initialPosition });
+    const position = new Position(eventManager, defaultMaxPos, { initialPosition });
     expect(position.position).to.equal(0);
   });
+
   it('should go to the next position', function () {
     const listener = spy();
     const initialPosition = defaultMaxPos / 2;
-    const position = new Position(defaultMaxPos, { initialPosition });
-    position.on('onPositionChange', listener);
-    position.goNext();
+    eventManager.on('positionChange', listener);
+    eventManager.emit('goNext');
     expect(position.position).to.equal(initialPosition + 1);
-    expect(listener).to.have.been.calledOnceWithExactly(true, initialPosition + 1, initialPosition);
+    expect(listener).to.have.been.calledOnceWithExactly(initialPosition, position);
   });
 });
