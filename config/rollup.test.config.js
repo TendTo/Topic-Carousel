@@ -17,6 +17,7 @@ export default {
       module: 'esnext',
       declarationMap: false,
       declarationDir: undefined,
+      tsconfig: 'config/tsconfig.build.json',
     }),
     sourcemaps(),
   ],
