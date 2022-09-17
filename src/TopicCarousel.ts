@@ -1,40 +1,18 @@
-import { TopicList } from './data/TopicList';
-import {
-  ArrowElement,
-  ElementOptions,
-  CarouselElement,
-  ItemElement,
-  TopicAllElement,
-  TopicElement,
-} from './element';
+import { ElementOptions, CarouselElement } from '@topic-carousel/element';
+import { PositionOptions } from '@topic-carousel/data';
+import { EventManager } from './event';
 
-type TopicCarouselOptions = {
-  /** Css selector used for the carousel container */
-  carouselSelector?: string;
-  /** Css selector used to identify the items of the carousel */
-  itemSelector?: string;
-  /** Css selector for the topic buttons*/
-  topicSelector?: string;
-  /** Css selector for button that handles the selection or deselection of all topics */
-  topicAllSelector?: string;
-  /** Css selector for the right arrow button */
-  rightArrowSelector?: string;
-  /** Css selector for the left arrow button */
-  leftArrowSelector?: string;
-  /** The data-[attribute] that will be used to identify and filter using topics */
-  topicDataAttribute?: string;
-  /** Class added to an active topic button */
-  topicButtonActiveClass?: string;
+/** Options for the initialization of a TopicCarousel object */
+type TopicCarouselOptions = Partial<ElementOptions> & Partial<PositionOptions>;
+
+export type TopicCarouselEvents = {
+  setup: () => void;
+  init: () => void;
+  destroy: () => void;
 };
 
 export class TopicCarousel {
-  private readonly carousel: CarouselElement;
-  private readonly topicList: TopicList;
-  private readonly topicElements: TopicElement[];
-  private readonly leftArrow: ArrowElement | null;
-  private readonly rightArrow: ArrowElement | null;
-  private readonly items: ItemElement[];
-  private readonly topicAllElement: TopicAllElement | null;
+  private readonly eventManager = new EventManager();
 
   /**
    * Creates a new TopicCarousel instance.
@@ -46,30 +24,25 @@ export class TopicCarousel {
    */
   constructor(topicCarouselOptions: TopicCarouselOptions);
   constructor(topicCarouselOptions: TopicCarouselOptions = {}) {
-    const elementOptions = this.getElementOptionsFromOptions(topicCarouselOptions);
-    this.topicList = new TopicList();
-    this.carousel = new CarouselElement(
-      elementOptions.carouselSelector,
-      elementOptions,
-      this.topicList,
-    );
-    this.topicAllElement = this.carousel.getTopicAllElement();
-    this.topicElements = this.carousel.getTopicElements();
-    this.items = this.carousel.getItems();
-    [this.leftArrow, this.rightArrow] = this.carousel.getArrows();
+    const options = this.applyDefaultOptions(topicCarouselOptions);
+
+    const carousel = new CarouselElement(this.eventManager, options.carouselSelector, options);
+    carousel.getTopicAllElement();
+    carousel.getTopicElements();
+    carousel.getItemsElement();
+    carousel.getArrows();
+
+    this.eventManager.emit('setup');
   }
 
   public init() {
-    this.topicElements.forEach((topicElement) => topicElement.addListeners());
-    this.items.forEach((item) => item.addListeners());
-    if (this.leftArrow) this.leftArrow.addListeners();
-    if (this.rightArrow) this.rightArrow.addListeners();
-    if (this.topicAllElement) this.topicAllElement.addListeners();
+    this.eventManager.emit('init');
   }
 
-  private getElementOptionsFromOptions(options: TopicCarouselOptions): ElementOptions {
+  private applyDefaultOptions(options: TopicCarouselOptions): Required<TopicCarouselOptions> {
     const {
       carouselSelector = '#topic-carousel',
+      itemsSelector = '.tc-items',
       itemSelector = '.tc-item',
       topicSelector = '.tc-topic',
       topicButtonActiveClass = 'tc-topic--active',
@@ -77,9 +50,14 @@ export class TopicCarousel {
       leftArrowSelector = '.tc-arrow--left',
       topicDataAttribute = 'topic',
       topicAllSelector = '#tc-topic-all',
+      transitionTransform = 'transform 0.4s ease-in-out',
+      transitionTeleport = 'none',
+      initialPosition = 0,
+      loop = 'none',
     } = options;
     return {
       carouselSelector,
+      itemsSelector,
       itemSelector,
       topicSelector,
       topicButtonActiveClass,
@@ -87,6 +65,10 @@ export class TopicCarousel {
       leftArrowSelector,
       topicDataAttribute,
       topicAllSelector,
+      transitionTransform,
+      transitionTeleport,
+      initialPosition,
+      loop,
     };
   }
 }

@@ -1,19 +1,14 @@
-import { Topic } from '../data/Topic';
-import { TopicList } from '../data/TopicList';
+import { Position, Topic, TopicList } from '@topic-carousel/data';
 import { ArrowElement } from './ArrowElement';
-import { BaseElement, ElementOptions } from './BaseElement';
+import { BaseElement } from './BaseElement';
 import { ItemElement } from './ItemElement';
+import { ItemsElement } from './ItemsElement';
 import { TopicAllElement } from './TopicAllElement';
 import { TopicElement } from './TopicElement';
 
 export class CarouselElement extends BaseElement {
-  constructor(
-    elementOrSelector: HTMLElement | string,
-    options: ElementOptions,
-    private readonly topicList: TopicList,
-  ) {
-    super(elementOrSelector, options);
-  }
+  private readonly topicList = new TopicList(this.eventManager);
+  private readonly position = new Position(this.eventManager);
 
   /**
    * Uses the css selector to find the topics in the carousel and returns them as a list of Topic instances.
@@ -37,7 +32,7 @@ export class CarouselElement extends BaseElement {
       `${this.elementOptions.topicSelector}[data-${this.elementOptions.topicDataAttribute}]`,
     );
     for (const element of elements) {
-      topicElements.push(new TopicElement(element, this.elementOptions, this.topicList));
+      topicElements.push(new TopicElement(this.eventManager, element, this.elementOptions));
       this.topicList.addTopic(
         new Topic(element.dataset[this.elementOptions.topicDataAttribute] ?? ''),
       );
@@ -49,14 +44,27 @@ export class CarouselElement extends BaseElement {
     if (!this.elementOptions.topicAllSelector) return null;
     const topicAllElement = this.querySelector(this.elementOptions.topicAllSelector);
     return topicAllElement
-      ? new TopicAllElement(topicAllElement, this.elementOptions, this.topicList)
+      ? new TopicAllElement(this.eventManager, topicAllElement, this.elementOptions)
       : null;
   }
 
-  getItems(): ItemElement[] {
-    return this.querySelectorAll(
+  public getItemElements(): ItemElement[] {
+    const items = this.querySelectorAll(
       `${this.elementOptions.itemSelector}[data-${this.elementOptions.topicDataAttribute}]`,
-    ).map((topicElement) => new ItemElement(topicElement, this.elementOptions, this.topicList));
+    ).map((topicElement) => new ItemElement(this.eventManager, topicElement, this.elementOptions));
+    return items;
+  }
+
+  public getItemsElement(): ItemsElement {
+    const items = this.querySelectorAll(
+      `${this.elementOptions.itemSelector}[data-${this.elementOptions.topicDataAttribute}]`,
+    ).map((topicElement) => new ItemElement(this.eventManager, topicElement, this.elementOptions));
+    return new ItemsElement(
+      this.eventManager,
+      this.elementOptions.itemsSelector,
+      this.elementOptions,
+      items,
+    );
   }
 
   /**
@@ -67,8 +75,8 @@ export class CarouselElement extends BaseElement {
     const lArrow = this.querySelector(this.elementOptions.leftArrowSelector);
     const rArrow = this.querySelector(this.elementOptions.rightArrowSelector);
     return [
-      lArrow ? new ArrowElement(lArrow, this.elementOptions) : null,
-      rArrow ? new ArrowElement(rArrow, this.elementOptions) : null,
+      lArrow ? new ArrowElement(this.eventManager, lArrow, this.elementOptions, 'prev') : null,
+      rArrow ? new ArrowElement(this.eventManager, rArrow, this.elementOptions, 'next') : null,
     ] as const;
   }
 }

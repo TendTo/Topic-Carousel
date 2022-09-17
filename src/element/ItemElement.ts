@@ -1,43 +1,49 @@
-import { Topic } from '../data/Topic';
-import { TopicList } from '../data/TopicList';
+import { EventManager } from '@topic-carousel/event';
 import { BaseElement, ElementOptions } from './BaseElement';
 
 export class ItemElement extends BaseElement {
-  private _isActive;
+  public isActive = false;
+  public overrideIsActive = false;
   public readonly topic: string;
 
   constructor(
+    eventManager: EventManager,
     elementOrSelector: HTMLElement | string,
     options: ElementOptions,
-    private readonly topicList: TopicList,
   ) {
-    super(elementOrSelector, options);
+    super(eventManager, elementOrSelector, options);
     this.topic = this.element.dataset[this.elementOptions.topicDataAttribute] ?? '';
-    this._isActive = getComputedStyle(this.element).display !== 'none';
   }
 
-  public get isActive(): boolean {
-    return this._isActive;
+  public get width(): number {
+    return this.element.getBoundingClientRect().width;
   }
 
-  public set isActive(isActive: boolean) {
-    if (this._isActive === isActive) return;
-    this._isActive = isActive;
-    this.element.style.display = isActive ? 'block' : 'none';
+  public get height(): number {
+    return this.element.getBoundingClientRect().height;
   }
 
-  public override addListeners(): void {
+  public override setupEvents(): void {
     this.element.addEventListener('click', this.onClick);
-    this.topicList.on('onTopicChange', this.onTopicChange);
   }
 
   private onClick = () => {
-    console.log('Item clicked');
+    console.log('Item clicked', this);
   };
 
-  private onTopicChange = (_: Topic | null, topicList: TopicList) => {
-    if (topicList.areAllActive || topicList.areAllInactive) this.isActive = true;
-    else
-      this.isActive = topicList.topics.some((topic) => topic.id === this.topic && topic.isActive);
-  };
+  public updateStyle() {
+    if (this.overrideIsActive || this.isActive) this.element.style.display = 'block';
+    else this.element.style.display = 'none';
+  }
+
+  public setPos(x: number, y: number) {
+    this.element.style.position = 'absolute';
+    this.element.style.left = `${x}px`;
+    this.element.style.top = `${y}px`;
+  }
+
+  public translate(x: number, y: number) {
+    this.element.style.transition = 'transform 1s ease-in-out';
+    window.requestAnimationFrame(() => (this.element.style.transform = `translate(${x}px,${y}px)`));
+  }
 }

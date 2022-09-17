@@ -1,6 +1,12 @@
+import { EventManager } from '@topic-carousel/event';
+import { EventClass } from '@topic-carousel/event/EventClass';
+
+/** Options for the initialization of an Element object */
 export type ElementOptions = {
   /** Css selector used for the carousel container */
   carouselSelector: string;
+  /** Css selector used to identify the items flex-box of the carousel */
+  itemsSelector: string;
   /** Css selector used to identify the items of the carousel */
   itemSelector: string;
   /** Css selector for the topic buttons*/
@@ -15,9 +21,16 @@ export type ElementOptions = {
   topicDataAttribute: string;
   /** Class added to an active topic button */
   topicButtonActiveClass: string;
+  /** Transform property applied to the items element when sliding to another item */
+  transitionTransform: string;
+  /**
+   * Transform property applied to the items element when it needs to teleport.
+   * Can be useful if you already expect the element to have some transition applied.
+   */
+  transitionTeleport: string;
 };
 
-export class BaseElement {
+export class BaseElement extends EventClass {
   public readonly element: HTMLElement;
 
   /**
@@ -25,18 +38,24 @@ export class BaseElement {
    * @param selector css selector for the element to be returned
    * @param options option configuration shared by all elements
    */
-  public constructor(selector: string, options: ElementOptions);
+  public constructor(eventManager: EventManager, selector: string, options: ElementOptions);
   /**
    * Creates a new BaseElement instance.
    * @param element element to be wrapped
    * @param options option configuration shared by all elements
    */
-  public constructor(element: HTMLElement, options: ElementOptions);
-  public constructor(elementOrSelector: string | HTMLElement, options: ElementOptions);
+  public constructor(eventManager: EventManager, element: HTMLElement, options: ElementOptions);
   public constructor(
+    eventManager: EventManager,
+    elementOrSelector: string | HTMLElement,
+    options: ElementOptions,
+  );
+  public constructor(
+    eventManager: EventManager,
     elementOrSelector: string | HTMLElement,
     public readonly elementOptions: ElementOptions,
   ) {
+    super(eventManager);
     if (typeof elementOrSelector === 'string') {
       const element = document.querySelector(elementOrSelector);
       if (!(element instanceof HTMLElement)) {
@@ -64,13 +83,5 @@ export class BaseElement {
    */
   public querySelectorAll(selector: string): HTMLElement[] {
     return Array.from(this.element.querySelectorAll(selector));
-  }
-
-  /**
-   * @virtual
-   * Adds all the listeners the element needs for its interactivity.
-   */
-  public addListeners() {
-    throw new Error('This element does not support adding listeners');
   }
 }

@@ -1,3 +1,6 @@
+type AnyFunctionArgs = any[];
+type AnyFunction = (...args: AnyFunctionArgs) => void;
+
 /**
  * Simple event emitter interface
  */
@@ -24,4 +27,27 @@ interface ITopic {
   additionalData: unknown;
   isActive: boolean;
   toggleActive(): void;
+}
+
+/**
+ * Topic interface
+ */
+interface IEventTargetHolder {
+  readonly eventTarget: EventTarget;
+}
+
+interface IEventClass {
+  /**
+   * @virtual
+   * Adds all the listeners the element needs for its interactivity.
+   */
+  setupEvents(): void;
+}
+
+interface IInit {
+  /**
+   * @virtual
+   * Initializes the element.
+   */
+  init(): void;
 }

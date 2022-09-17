@@ -1,3 +1,3 @@
-export { Position } from './Position';
-export { TopicList } from './TopicList';
+export { Position, PositionOptions, PositionEvents } from './Position';
+export { TopicList, TopicListEvents } from './TopicList';
 export { Topic } from './Topic';

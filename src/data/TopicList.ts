@@ -1,44 +1,40 @@
-import { TopicElement } from '../element/TopicElement';
+import { EventManager, EventClass } from '@topic-carousel/event';
+import { TopicElement } from '@topic-carousel/element';
 import { Topic } from './Topic';
 
 type OnTopicChangeCallback = (topic: Topic | null, topicList: TopicList) => void;
 
-type TopicListEvents = {
-  onTopicChange: OnTopicChangeCallback;
+export type TopicListEvents = {
+  topicChange: OnTopicChangeCallback;
 };
 
-export class TopicList implements IEventEmitter<TopicListEvents> {
+export class TopicList extends EventClass {
   private _topics: Topic[];
-  private _onTopicChangeCallbacks: OnTopicChangeCallback[] = [];
   private _nActive = 0;
 
-  static fromTopicElements(topicElements: TopicElement[]): TopicList {
-    return new TopicList(topicElements.map((topicElement) => new Topic(topicElement.topic)));
+  static fromTopicElements(eventManager: EventManager, topicElements: TopicElement[]): TopicList {
+    return new TopicList(
+      eventManager,
+      topicElements.map((topicElement) => new Topic(topicElement.topic)),
+    );
   }
 
-  constructor(topics?: Topic[]) {
+  constructor(eventManager: EventManager, topics?: Topic[]) {
+    super(eventManager);
     this._topics = [...new Set(topics)] ?? [];
     this._nActive = this.calculateNActive();
   }
 
-  public on<E extends keyof TopicListEvents>(event: E, listener: TopicListEvents[E]) {
-    switch (event) {
-      case 'onTopicChange':
-        this._onTopicChangeCallbacks.push(listener as OnTopicChangeCallback);
-        break;
-      default:
-        throw new Error(`Event ${event} not found`);
-    }
+  public override setupEvents(): void {
+    this.eventManager.on('topicClick', this.onTopicClick);
+    this.eventManager.on('topicAllClick', this.onTopicAllClick);
   }
 
-  public off<E extends keyof TopicListEvents>(event: E, listener: TopicListEvents[E]): void {
-    switch (event) {
-      case 'onTopicChange':
-        this._onTopicChangeCallbacks = this._onTopicChangeCallbacks.filter((cb) => cb !== listener);
-        break;
-      default:
-        throw new Error(`Event ${event} not found`);
-    }
+  private onTopicClick = (topic: string) => this.toggleTopic(topic);
+  private onTopicAllClick = () => this.setTopicsActive(false);
+
+  protected override init(): void {
+    this.eventManager.emit('topicChange', null, this);
   }
 
   private calculateNActive(): number {
@@ -97,7 +93,7 @@ export class TopicList implements IEventEmitter<TopicListEvents> {
 
   private onTopicChange(topic: Topic | null = null) {
     if (topic) this._nActive += topic.isActive ? 1 : -1;
-    this._onTopicChangeCallbacks.forEach((callback) => callback(topic, this));
+    this.eventManager.emit('topicChange', topic, this);
   }
 
   public toggleTopic(id: string | number): void {

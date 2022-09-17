@@ -1,6 +1,7 @@
 export { ElementOptions } from './BaseElement';
-export { ArrowElement } from './ArrowElement';
+export { ArrowElement, ArrowElementEvents } from './ArrowElement';
 export { CarouselElement } from './CarouselElement';
 export { ItemElement } from './ItemElement';
-export { TopicAllElement } from './TopicAllElement';
-export { TopicElement } from './TopicElement';
+export { TopicAllElement, TopicAllElementEvents } from './TopicAllElement';
+export { TopicElement, TopicElementEvents } from './TopicElement';
+export { ItemsElement, ItemsElementEvents } from './ItemsElement';

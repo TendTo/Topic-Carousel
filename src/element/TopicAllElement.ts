@@ -1,22 +1,17 @@
-import { Topic } from '../data/Topic';
-import { TopicList } from '../data/TopicList';
-import { BaseElement, ElementOptions } from './BaseElement';
+import { TopicList, Topic } from '@topic-carousel/data';
+import { BaseElement } from './BaseElement';
+
+export type TopicAllElementEvents = {
+  topicAllClick: () => void;
+};
 
 export class TopicAllElement extends BaseElement {
   private _isActive = false;
 
-  constructor(
-    elementOrSelector: HTMLElement | string,
-    options: ElementOptions,
-    private readonly topicList: TopicList,
-  ) {
-    super(elementOrSelector, options);
-    this.isActive = this.topicList.areAllInactive;
-  }
-
   public get isActive(): boolean {
     return this._isActive;
   }
+
   public set isActive(isActive: boolean) {
     // No need to update anything if the state is the same
     if (this._isActive === isActive) return;
@@ -24,21 +19,13 @@ export class TopicAllElement extends BaseElement {
     this.element.classList.toggle(this.elementOptions.topicButtonActiveClass, isActive);
   }
 
-  toggleActive(): void {
-    this.isActive = !this._isActive;
-  }
-
-  public override addListeners(): void {
+  public override setupEvents(): void {
     this.element.addEventListener('click', this.onClick);
-    this.topicList.on('onTopicChange', this.onTopicChange);
+    this.eventManager.on('topicChange', this.onTopicChange);
   }
 
-  private onClick = () => {
-    this.isActive = true;
-    this.topicList.setTopicsActive(false);
-  };
+  private onClick = () => this.eventManager.emit('topicAllClick');
 
-  private onTopicChange = (_: Topic | null, topicList: TopicList) => {
-    this.isActive = topicList.areAllInactive;
-  };
+  private onTopicChange = (_: Topic | null, topicList: TopicList) =>
+    (this.isActive = topicList.areAllInactive);
 }

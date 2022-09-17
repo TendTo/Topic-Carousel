@@ -1,37 +1,84 @@
-import { clamp } from '../util';
+import { ItemsElement } from '@topic-carousel/element';
+import { EventManager, EventClass } from '@topic-carousel/event';
+import { clamp, error } from '@topic-carousel/util';
 
-type PositionOptions = {
+type LoopType = 'none' | 'jump' | 'continue';
+
+/** Options for the initialization of a Position object */
+export type PositionOptions = {
   /** Whether the position will reset upon going over the maximum value
    * and go the end when going under the minimum one.
    * If false, in the situation described above, the limit position will be returned */
-  loop?: boolean;
+  loop?: LoopType;
   /**
    * Initial position of the carousel.
-   * Must be between 0 and maxPosition - 1.
+   * Must be between 0 and maxPosition.
    */
   initialPosition?: number;
 };
 
-type OnPositionChangeCallback = (isGoNext: boolean, position: number, prevPosition: number) => void;
+type OnPositionChangeCallback = (prevPosition: number, position: Position) => void;
 
-type PositionEvents = {
-  onPositionChange: OnPositionChangeCallback;
+export type PositionEvents = {
+  positionChange: OnPositionChangeCallback;
 };
 
-export class Position implements IEventEmitter<PositionEvents> {
+export class Position extends EventClass {
   private _position: number;
-  private _onTopicChangeCallbacks: OnPositionChangeCallback[] = [];
-  public readonly initialPosition: number;
-  public readonly maxPosition: number;
-  public readonly loop: boolean;
+  private _maxPosition: number;
+  private _nColumns = 2;
+  private _nItems = 1;
+  public readonly loop: LoopType;
 
-  constructor(maxPosition: number);
-  constructor(maxPosition: number, options?: PositionOptions);
-  constructor(maxPosition: number, { loop = false, initialPosition = 0 }: PositionOptions = {}) {
-    this.maxPosition = maxPosition > 0 ? maxPosition : 0;
+  constructor(eventManager: EventManager);
+  constructor(eventManager: EventManager, maxPosition: number);
+  constructor(eventManager: EventManager, maxPosition: number, options?: PositionOptions);
+  constructor(
+    eventManager: EventManager,
+    maxPosition = 0,
+    { loop = 'none', initialPosition = 0 }: PositionOptions = {},
+  ) {
+    super(eventManager);
+    this._maxPosition = maxPosition > 0 ? maxPosition : 0;
     this.loop = loop;
-    this.initialPosition = clamp(initialPosition, 0, this.maxPosition);
-    this._position = this.initialPosition;
+    this._position = clamp(initialPosition, 0, this._maxPosition);
+  }
+
+  protected override setupEvents(): void {
+    this.eventManager.on('goNext', this.onGoNext);
+    this.eventManager.on('goPrev', this.onGoPrev);
+    this.eventManager.on('updateItems', this.onUpdateItems);
+    // this.eventManager.on('updateColumns', this.onUpdateColumns);
+  }
+
+  private onUpdateItems = (itemsElement: ItemsElement) => {
+    this.nItems = itemsElement.nActive;
+  };
+
+  private onUpdateColumns = (itemsElement: ItemsElement) => {
+    this.nItems = itemsElement.nActive;
+  };
+
+  private onGoNext = (): void => {
+    if (this.loop === 'none') this.position = Math.min(this._position + 1, this._maxPosition);
+    else if (this.loop === 'jump') this.position = (this._position + 1) % (this._maxPosition + 1);
+    else if (this.loop === 'continue') error('Not implemented yet');
+  };
+
+  private onGoPrev = (): void => {
+    if (this.loop === 'none') this.position = Math.max(this._position - 1, 0);
+    else if (this.loop === 'jump')
+      this.position = (this._position + this._maxPosition) % (this._maxPosition + 1);
+    else if (this.loop === 'continue') error('Not implemented yet');
+  };
+
+  public get maxPosition(): number {
+    return this._maxPosition;
+  }
+
+  private set maxPosition(maxPosition: number) {
+    this._maxPosition = maxPosition;
+    if (this._position > maxPosition) this.position = maxPosition;
   }
 
   public get position(): number {
@@ -40,47 +87,25 @@ export class Position implements IEventEmitter<PositionEvents> {
 
   public set position(position: number) {
     const prevPosition = this._position;
-    this._position = clamp(position, 0, this.maxPosition);
-    this.onPositionChange(this._position > prevPosition, this._position, prevPosition);
+    this._position = clamp(position, 0, this._maxPosition);
+    this.eventManager.emit('positionChange', prevPosition, this);
   }
 
-  on<E extends keyof PositionEvents>(event: E, listener: PositionEvents[E]): void {
-    switch (event) {
-      case 'onPositionChange':
-        this._onTopicChangeCallbacks.push(listener as OnPositionChangeCallback);
-        break;
-      default:
-        throw new Error(`Event ${event} not found`);
-    }
+  public get nColumns(): number {
+    return this._nColumns;
   }
 
-  off<E extends keyof PositionEvents>(event: E, listener: PositionEvents[E]): void {
-    switch (event) {
-      case 'onPositionChange':
-        this._onTopicChangeCallbacks = this._onTopicChangeCallbacks.filter((cb) => cb !== listener);
-        break;
-      default:
-        throw new Error(`Event ${event} not found`);
-    }
+  public set nColumns(nColumns: number) {
+    this._nColumns = nColumns;
+    this.maxPosition = Math.max(this._nItems - nColumns, 0);
   }
 
-  private onPositionChange(isGoNext: boolean, position: number, prevPosition: number): void {
-    this._onTopicChangeCallbacks.forEach((cb) => cb(isGoNext, position, prevPosition));
+  public get nItems(): number {
+    return this._nItems;
   }
 
-  public goNext(): void {
-    const prevPosition = this._position;
-    this._position = this.loop
-      ? (this._position + 1) % this.maxPosition
-      : Math.min(this._position + 1, this.maxPosition);
-    this.onPositionChange(true, this._position, prevPosition);
-  }
-
-  public goPrev(): void {
-    const prevPosition = this._position;
-    this._position = this.loop
-      ? (this._position - 1 + this.maxPosition) % this.maxPosition
-      : Math.max(this._position - 1, 0);
-    this.onPositionChange(false, this._position, prevPosition);
+  public set nItems(nItems: number) {
+    this._nItems = nItems;
+    this.maxPosition = Math.max(nItems - this._nColumns, 0);
   }
 }
