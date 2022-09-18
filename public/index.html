@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test</title>
-    <link rel="stylesheet" href="./css/generico.css" />
+    <link rel="stylesheet" href="./css/default.css" />
   </head>
   <body>
     <div id="topic-carousel" data-sm="1" data-md="2" data-lg="3" data-n-cols="2">
@@ -75,7 +75,9 @@
   </body>
   <script src="./dist/bundle/topiccarousel.js"></script>
   <script>
-    var carousel = new TopicCarousel.TopicCarousel();
-    carousel.init();
+    window.addEventListener('DOMContentLoaded', () => {
+      var carousel = new TopicCarousel.TopicCarousel({ loop: 'jump', arrowThrottle: 500 });
+      carousel.init();
+    });
   </script>
 </html>
