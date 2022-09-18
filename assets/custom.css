@@ -1,0 +1,309 @@
+/**
+ * Default values.
+ * Can be overridden by the user.
+ */
+/** Theme color */
+/** Theme grays */
+/** Margins */
+/** Typography */
+/** Common breakpoints */
+/** Common colors */
+.no-transition-tn {
+  --webkit-transition: none !important;
+  --moz-transition: none !important;
+  --o-transition: none !important;
+  --ms-transition: none !important;
+  transition: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/** Card */
+#topic-carousel {
+  box-shadow: 0 0 2px #9e9e9e;
+  font-family: "Roboto";
+}
+#topic-carousel::before {
+  content: "sm";
+  display: none;
+  visibility: hidden;
+}
+@media (max-width: 782px) {
+  #topic-carousel::before {
+    content: "sm";
+  }
+}
+@media (min-width: 782px) and (max-width: 993px) {
+  #topic-carousel::before {
+    content: "md";
+  }
+}
+@media (min-width: 993px) {
+  #topic-carousel::before {
+    content: "lg";
+  }
+}
+#topic-carousel .tc-title-container {
+  align-content: normal;
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 4px 4px 0 0;
+  height: fit-content;
+  padding: 0 16px;
+}
+#topic-carousel .tc-title {
+  color: #424242;
+  font-family: "Raleway";
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 32px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  text-align: left;
+}
+#topic-carousel .tc-content {
+  background-color: #0d47a1;
+  border-radius: 0 0 4px 4px;
+  position: relative;
+}
+
+/** Topic-Badges */
+.tc-topics-container {
+  display: block;
+  margin-left: 14px;
+  margin-right: 14px;
+  overflow-x: hidden;
+  padding-top: 18px;
+}
+.tc-topics-container::-webkit-scrollbar {
+  display: none;
+}
+.tc-topics-container .tc-topics {
+  align-content: normal;
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  column-gap: 8px;
+}
+.tc-topics-container .tc-topic {
+  border: 1px solid #039be5;
+  border-radius: 15px;
+  color: #fafafa;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 24px;
+  padding: 4px 8px;
+  user-select: none;
+  white-space: nowrap;
+}
+.tc-topics-container .tc-topic--active {
+  background-color: #039be5;
+}
+
+/** Topic-Dropdown */
+.tc-dropdown {
+  display: none;
+  height: 40px;
+  margin-left: 18px;
+  position: relative;
+}
+
+.tc-dropdown-content {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1607843137);
+  color: #424242;
+  display: none;
+  font-size: 14px;
+  line-height: 24px;
+  padding: 8px;
+  padding-right: 16px;
+  position: absolute;
+  row-gap: 8px;
+  width: fit-content;
+  z-index: 10;
+}
+.tc-dropdown-content:hover {
+  align-content: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+
+.checkbox-tn[type=checkbox]:checked + span {
+  font-weight: 700;
+}
+
+.tc-dropdown-btn {
+  align-content: stretch;
+  align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  color: #fafafa;
+  cursor: pointer;
+  font-size: 14px;
+  height: 100%;
+  line-height: 24px;
+  user-select: none;
+  width: fit-content;
+}
+.tc-dropdown-btn:hover ~ .tc-dropdown-content {
+  align-content: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+.tc-dropdown-btn > i {
+  width: fit-content;
+}
+
+/** Nav arrows */
+.tc-arrows {
+  align-content: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  background: rgba(25, 25, 25, 0.1019607843) 0% 0% no-repeat padding-box;
+  height: 48px;
+  position: absolute;
+  right: 0;
+  top: 68px;
+  width: 100%;
+  z-index: 1;
+}
+
+.tc-arrow {
+  background-color: #f44336;
+  cursor: default;
+  opacity: 1;
+  user-select: none;
+  z-index: 1;
+}
+.tc-arrow > i {
+  color: #fafafa;
+  font-size: 40px;
+}
+
+/** Items */
+.tc-items-container {
+  overflow-x: hidden;
+  padding: 16px 8px;
+  width: 100%;
+}
+
+.tc-items {
+  align-content: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+
+.tc-item {
+  flex-shrink: 0;
+  padding: 0 8px;
+  width: 50%;
+}
+.tc-item .tc-item-content {
+  padding: 8px;
+  background-color: gray;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  line-height: 400px;
+}
+
+@media (max-width: 782px) {
+  #unused[data-sm="1"] .tc-items-container {
+    padding: 0;
+  }
+  #unused[data-sm="1"] .tc-topics-container {
+    display: none;
+  }
+  #unused[data-sm="1"] .dropdown-tn {
+    display: block;
+  }
+  #unused[data-sm="1"] .tc-arrows {
+    top: 0;
+    width: 80px;
+  }
+  #unused[data-sm="1"] .tc-item {
+    padding: 0;
+    width: 100%;
+  }
+  #unused[data-sm="1"] .tc-title-container {
+    align-items: flex-start;
+    flex-flow: column nowrap;
+  }
+  #unused[data-sm="3"] .tc-item {
+    width: 33%;
+  }
+}
+@media (min-width: 782px) and (max-width: 993px) {
+  #unused[data-md="1"] .tc-items-container {
+    padding: 0;
+  }
+  #unused[data-md="1"] .tc-topics-container {
+    display: none;
+  }
+  #unused[data-md="1"] .dropdown-tn {
+    display: block;
+  }
+  #unused[data-md="1"] .tc-arrows {
+    top: 0;
+    width: 80px;
+  }
+  #unused[data-md="1"] .tc-item {
+    padding: 0;
+    width: 100%;
+  }
+  #unused[data-md="1"] .tc-title-container {
+    align-items: flex-start;
+    flex-flow: column nowrap;
+  }
+  #unused[data-md="3"] .tc-item {
+    width: 33%;
+  }
+}
+@media (min-width: 993px) {
+  #unused[data-lg="1"] .tc-items-container {
+    padding: 0;
+  }
+  #unused[data-lg="1"] .tc-topics-container {
+    display: none;
+  }
+  #unused[data-lg="1"] .dropdown-tn {
+    display: block;
+  }
+  #unused[data-lg="1"] .tc-arrows {
+    top: 0;
+    width: 80px;
+  }
+  #unused[data-lg="1"] .tc-item {
+    padding: 0;
+    width: 100%;
+  }
+  #unused[data-lg="1"] .tc-title-container {
+    align-items: flex-start;
+    flex-flow: column nowrap;
+  }
+  #unused[data-lg="3"] .tc-item {
+    width: 33%;
+  }
+}
+
+/*# sourceMappingURL=default.css.map */
