@@ -10,8 +10,10 @@
         "@knodes/typedoc-plugin-pages",
         "typedoc-plugin-missing-exports"
     ],
+    "searchInComments": true,
     "includeVersion": true,
     "excludeExternals": true,
+    "customCss": "public/css/default.css",
     "internalModule": "Internal components",
     "readme": "README.md",
     "pluginPages": {
