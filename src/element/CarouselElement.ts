@@ -6,9 +6,20 @@ import { ItemsElement } from './ItemsElement';
 import { TopicAllElement } from './TopicAllElement';
 import { TopicElement } from './TopicElement';
 
+export type CarouselElementEvents = {
+  updateNCols: (nCols: number) => void;
+};
+
 export class CarouselElement extends BaseElement {
   private readonly topicList = new TopicList(this.eventManager);
   private readonly position = new Position(this.eventManager);
+
+  protected override init(): void {
+    const nColsDataAttribute = this.element.dataset[this.elementOptions.nColsDataAttribute];
+    let nCols = parseInt(nColsDataAttribute ?? 'NaN', 10);
+    if (Number.isNaN(nCols)) nCols = this.elementOptions.defaultNCols;
+    this.eventManager.emit('updateNCols', nCols);
+  }
 
   /**
    * Uses the css selector to find the topics in the carousel and returns them as a list of Topic instances.

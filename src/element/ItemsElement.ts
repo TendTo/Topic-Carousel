@@ -2,18 +2,19 @@ import { ItemElement } from '@topic-carousel/element';
 import { TopicList } from '../data/TopicList';
 import { BaseElement, ElementOptions } from './BaseElement';
 import { EventManager } from '@topic-carousel/event';
-import { INVALID_WIDTH } from '@topic-carousel/constants';
+import { INVALID_NUMBER_VALUE } from '@topic-carousel/constants';
 import { Position, Topic } from '@topic-carousel/data';
+import { debounce } from '@topic-carousel/util';
 
 export type ItemsElementEvents = {
-  updatePosition: (position: number) => void;
+  updatePosition: (lastPosition: number) => void;
   updateItems: (itemsElement: ItemsElement) => void;
 };
 
 export class ItemsElement extends BaseElement implements IEventClass, IInit {
   private _items: ItemElement[] = [];
-  private _nActive = 0;
-  private itemWidth = 0;
+  private itemWidth = INVALID_NUMBER_VALUE;
+  private lastPosition = INVALID_NUMBER_VALUE;
 
   constructor(
     eventManager: EventManager,
@@ -26,24 +27,27 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
   }
 
   public override setupEvents(): void {
-    window.addEventListener('resize', this.onResize);
+    window.addEventListener('resize', debounce(this.onResize));
     this.eventManager.on('topicChange', this.onTopicChange);
     this.eventManager.on('positionChange', this.onPositionChange);
+    if (this.elementOptions.autoSetItemsWidth) this.eventManager.on('updateNCols', this.onResize);
   }
 
   public override init(): void {
-    this._nActive = this.calculateNActive();
     this.onResize();
     this.eventManager.emit('updateItems', this);
   }
 
   private onResize = (): void => {
     const item = this._items.find((item) => item.isActive || item.overrideIsActive);
-    this.itemWidth = item?.width ?? INVALID_WIDTH;
+    this.itemWidth = item?.width ?? INVALID_NUMBER_VALUE;
+    if (this.lastPosition !== INVALID_NUMBER_VALUE) this.onPositionChange(this.lastPosition);
   };
 
-  private onPositionChange = (_: number, position: Position) => {
-    this.translate(-position.position * this.itemWidth, 0);
+  private onPositionChange = (prevPosition: number, position?: Position) => {
+    const pos = position?.position ?? prevPosition;
+    this.lastPosition = pos;
+    this.translate(-pos * this.itemWidth, 0);
   };
 
   private onTopicChange = (topic: Topic | null, topicList: TopicList) => {
@@ -59,20 +63,15 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
       }
       item.updateStyle();
     });
-    if (this.itemWidth === INVALID_WIDTH) this.onResize();
-    this._nActive = this.calculateNActive();
+    if (this.itemWidth === INVALID_NUMBER_VALUE) this.onResize();
     this.eventManager.emit('updateItems', this);
   };
 
-  private calculateNActive(): number {
+  public get nActive(): number {
     return this._items.reduce(
       (nActive, item) => (nActive += item.isActive || item.overrideIsActive ? 1 : 0),
       0,
     );
-  }
-
-  public get nActive(): number {
-    return this._nActive;
   }
 
   public get items(): ItemElement[] {
@@ -81,7 +80,6 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
 
   public set items(items: ItemElement[]) {
     this._items = items;
-    this._nActive = this.calculateNActive();
     this.onResize();
     this.eventManager.emit('updateItems', this);
   }
@@ -94,24 +92,14 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
     return this._items.filter((item) => !item.isActive && !item.overrideIsActive);
   }
 
-  public get areAllActive(): boolean {
-    return this._nActive === this._items.length;
-  }
-
-  public get areAllInactive(): boolean {
-    return this._nActive === 0;
-  }
-
   public addItem(item: ItemElement, idx = -1): void {
     if (this._items.indexOf(item) !== -1) return;
     this._items.push(item);
-    this._nActive += item.isActive ? 1 : 0;
     this.eventManager.emit('updateItems', this);
   }
 
   public removeItem(item: ItemElement, del = true): void {
     this._items.splice(this._items.indexOf(item), 1);
-    this._nActive -= item.isActive ? 1 : 0;
     this.eventManager.emit('updateItems', this);
   }
 

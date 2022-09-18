@@ -1,5 +1,4 @@
-import { EventManager } from '@topic-carousel/event';
-import { EventClass } from '@topic-carousel/event/EventClass';
+import { EventManager, EventClass } from '@topic-carousel/event';
 
 /** Options for the initialization of an Element object */
 export type ElementOptions = {
@@ -28,6 +27,12 @@ export type ElementOptions = {
    * Can be useful if you already expect the element to have some transition applied.
    */
   transitionTeleport: string;
+  /** Data attribute in the carousel element that indicates the number of columns */
+  nColsDataAttribute: string;
+  /** Default number of columns if the {@link nColsDataAttribute} was not found */
+  defaultNCols: number;
+  /** Wether the width of each item should be set automatically based on the number of columns  */
+  autoSetItemsWidth: boolean;
 };
 
 export class BaseElement extends EventClass {

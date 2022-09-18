@@ -12,7 +12,7 @@ export type TopicCarouselEvents = {
 };
 
 export class TopicCarousel {
-  private readonly eventManager = new EventManager();
+  public readonly eventManager = new EventManager();
 
   /**
    * Creates a new TopicCarousel instance.
@@ -54,6 +54,9 @@ export class TopicCarousel {
       transitionTeleport = 'none',
       initialPosition = 0,
       loop = 'none',
+      defaultNCols = 2,
+      nColsDataAttribute = 'nCols',
+      autoSetItemsWidth = true,
     } = options;
     return {
       carouselSelector,
@@ -69,6 +72,9 @@ export class TopicCarousel {
       transitionTeleport,
       initialPosition,
       loop,
+      defaultNCols,
+      nColsDataAttribute,
+      autoSetItemsWidth,
     };
   }
 }

@@ -24,12 +24,11 @@ export class ItemElement extends BaseElement {
   }
 
   public override setupEvents(): void {
-    this.element.addEventListener('click', this.onClick);
+    if (this.elementOptions.autoSetItemsWidth)
+      this.eventManager.on('updateNCols', this.onUpdateNCols);
   }
 
-  private onClick = () => {
-    console.log('Item clicked', this);
-  };
+  private onUpdateNCols = (nCols: number) => (this.element.style.width = `${100 / nCols}%`);
 
   public updateStyle() {
     if (this.overrideIsActive || this.isActive) this.element.style.display = 'block';

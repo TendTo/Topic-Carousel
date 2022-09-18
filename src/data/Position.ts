@@ -26,7 +26,7 @@ export type PositionEvents = {
 export class Position extends EventClass {
   private _position: number;
   private _maxPosition: number;
-  private _nColumns = 2;
+  private _nCols = 2;
   private _nItems = 1;
   public readonly loop: LoopType;
 
@@ -48,16 +48,12 @@ export class Position extends EventClass {
     this.eventManager.on('goNext', this.onGoNext);
     this.eventManager.on('goPrev', this.onGoPrev);
     this.eventManager.on('updateItems', this.onUpdateItems);
-    // this.eventManager.on('updateColumns', this.onUpdateColumns);
+    this.eventManager.on('updateNCols', this.onUpdateColumns);
   }
 
-  private onUpdateItems = (itemsElement: ItemsElement) => {
-    this.nItems = itemsElement.nActive;
-  };
+  private onUpdateItems = (itemsElement: ItemsElement) => (this.nItems = itemsElement.nActive);
 
-  private onUpdateColumns = (itemsElement: ItemsElement) => {
-    this.nItems = itemsElement.nActive;
-  };
+  private onUpdateColumns = (nCols: number) => (this.nCols = nCols);
 
   private onGoNext = (): void => {
     if (this.loop === 'none') this.position = Math.min(this._position + 1, this._maxPosition);
@@ -91,12 +87,12 @@ export class Position extends EventClass {
     this.eventManager.emit('positionChange', prevPosition, this);
   }
 
-  public get nColumns(): number {
-    return this._nColumns;
+  public get nCols(): number {
+    return this._nCols;
   }
 
-  public set nColumns(nColumns: number) {
-    this._nColumns = nColumns;
+  public set nCols(nColumns: number) {
+    this._nCols = nColumns;
     this.maxPosition = Math.max(this._nItems - nColumns, 0);
   }
 
@@ -106,6 +102,6 @@ export class Position extends EventClass {
 
   public set nItems(nItems: number) {
     this._nItems = nItems;
-    this.maxPosition = Math.max(nItems - this._nColumns, 0);
+    this.maxPosition = Math.max(nItems - this._nCols, 0);
   }
 }

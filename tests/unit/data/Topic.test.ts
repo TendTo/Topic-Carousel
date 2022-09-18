@@ -5,6 +5,7 @@ describe('Topic', function () {
   it('should be created', function () {
     expect(new Topic('')).to.be.ok;
   });
+
   it('should have the correct setup', function () {
     const id = 'name';
     const topic = new Topic(id);
@@ -12,6 +13,7 @@ describe('Topic', function () {
     expect(topic.isActive).to.be.false;
     expect(topic.additionalData).to.be.undefined;
   });
+
   it('should have the correct setup with additional data', function () {
     const id = 'name';
     const additionalData = { key: 'value' };
@@ -20,6 +22,7 @@ describe('Topic', function () {
     expect(topic.isActive).to.be.false;
     expect(topic.additionalData).to.deep.equal(additionalData);
   });
+
   it('should toggle isActive', function () {
     const topic = new Topic('');
     expect(topic.isActive).to.be.false;

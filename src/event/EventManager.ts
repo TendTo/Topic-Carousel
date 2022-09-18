@@ -4,6 +4,7 @@ import {
   ItemsElementEvents,
   TopicElementEvents,
   TopicAllElementEvents,
+  CarouselElementEvents,
 } from '@topic-carousel/element';
 import { TopicCarouselEvents } from '@topic-carousel/TopicCarousel';
 import { EventBinder } from './EventBinder';
@@ -14,7 +15,8 @@ export type EventMap = PositionEvents &
   ItemsElementEvents &
   TopicElementEvents &
   TopicAllElementEvents &
-  TopicCarouselEvents;
+  TopicCarouselEvents &
+  CarouselElementEvents;
 
 /**
  * The constructor function that provides interface for internal and native events.
