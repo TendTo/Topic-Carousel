@@ -1,4 +1,5 @@
 import { EventManager } from '@topic-carousel/event';
+import { throttle } from '@topic-carousel/util';
 import { BaseElement, ElementOptions } from './BaseElement';
 
 type ArrowDirection = 'prev' | 'next';
@@ -19,7 +20,10 @@ export class ArrowElement extends BaseElement {
   }
 
   public override setupEvents(): void {
-    this.element.addEventListener('click', this.onClick);
+    this.element.addEventListener(
+      'click',
+      throttle(this.onClick, this.elementOptions.arrowThrottle),
+    );
   }
 
   private onClick = () => {

@@ -14,3 +14,19 @@ export function debounce(callback: AnyFunction, wait = 100, callNow = false) {
     else timeout = window.setTimeout(callback, wait);
   };
 }
+
+/**
+ * Produces a throttled callback that avoids executing a function more than once every {@link wait} milliseconds.
+ * @param callback callback to be throttled
+ * @param wait milliseconds to wait
+ * @returns new callback function with throttled functionality
+ */
+export function throttle(callback: AnyFunction, wait = 100) {
+  let timeout: number | undefined;
+
+  return function executedFunction(...args: AnyFunctionArgs) {
+    if (timeout) return;
+    timeout = window.setTimeout(() => (timeout = undefined), wait);
+    callback(...args);
+  };
+}

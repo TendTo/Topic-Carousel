@@ -1,6 +1,7 @@
-import { Position, Topic, TopicList } from '@topic-carousel/data';
+import { Position, PositionOptions, Topic, TopicList } from '@topic-carousel/data';
+import { EventManager } from '@topic-carousel/event';
 import { ArrowElement } from './ArrowElement';
-import { BaseElement } from './BaseElement';
+import { BaseElement, ElementOptions } from './BaseElement';
 import { ItemElement } from './ItemElement';
 import { ItemsElement } from './ItemsElement';
 import { TopicAllElement } from './TopicAllElement';
@@ -12,7 +13,15 @@ export type CarouselElementEvents = {
 
 export class CarouselElement extends BaseElement {
   private readonly topicList = new TopicList(this.eventManager);
-  private readonly position = new Position(this.eventManager);
+  private readonly position = new Position(this.eventManager, this.elementOptions);
+
+  public constructor(
+    eventManager: EventManager,
+    elementOrSelector: string | HTMLElement,
+    public readonly elementOptions: ElementOptions & PositionOptions,
+  ) {
+    super(eventManager, elementOrSelector, elementOptions);
+  }
 
   protected override init(): void {
     const nColsDataAttribute = this.element.dataset[this.elementOptions.nColsDataAttribute];

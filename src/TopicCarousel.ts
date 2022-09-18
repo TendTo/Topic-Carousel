@@ -53,10 +53,12 @@ export class TopicCarousel {
       transitionTransform = 'transform 0.4s ease-in-out',
       transitionTeleport = 'none',
       initialPosition = 0,
+      maxPosition = 0,
       loop = 'none',
       defaultNCols = 2,
       nColsDataAttribute = 'nCols',
       autoSetItemsWidth = true,
+      arrowThrottle = 200,
     } = options;
     return {
       carouselSelector,
@@ -71,10 +73,12 @@ export class TopicCarousel {
       transitionTransform,
       transitionTeleport,
       initialPosition,
+      maxPosition,
       loop,
       defaultNCols,
       nColsDataAttribute,
       autoSetItemsWidth,
+      arrowThrottle,
     };
   }
 }

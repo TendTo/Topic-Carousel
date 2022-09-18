@@ -33,6 +33,8 @@ export type ElementOptions = {
   defaultNCols: number;
   /** Wether the width of each item should be set automatically based on the number of columns  */
   autoSetItemsWidth: boolean;
+  /** Milliseconds that have to elapse between the arrow click to be registered again  */
+  arrowThrottle: number;
 };
 
 export class BaseElement extends EventClass {

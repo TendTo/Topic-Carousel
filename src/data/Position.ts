@@ -15,6 +15,8 @@ export type PositionOptions = {
    * Must be between 0 and maxPosition.
    */
   initialPosition?: number;
+  /** Maximum position of the carousel. */
+  maxPosition?: number;
 };
 
 type OnPositionChangeCallback = (prevPosition: number, position: Position) => void;
@@ -31,12 +33,11 @@ export class Position extends EventClass {
   public readonly loop: LoopType;
 
   constructor(eventManager: EventManager);
-  constructor(eventManager: EventManager, maxPosition: number);
-  constructor(eventManager: EventManager, maxPosition: number, options?: PositionOptions);
+  constructor(eventManager: EventManager);
+  constructor(eventManager: EventManager, options?: PositionOptions);
   constructor(
     eventManager: EventManager,
-    maxPosition = 0,
-    { loop = 'none', initialPosition = 0 }: PositionOptions = {},
+    { loop = 'none', initialPosition = 0, maxPosition = 0 }: PositionOptions = {},
   ) {
     super(eventManager);
     this._maxPosition = maxPosition > 0 ? maxPosition : 0;
@@ -56,12 +57,14 @@ export class Position extends EventClass {
   private onUpdateColumns = (nCols: number) => (this.nCols = nCols);
 
   private onGoNext = (): void => {
+    console.log(this.loop);
     if (this.loop === 'none') this.position = Math.min(this._position + 1, this._maxPosition);
     else if (this.loop === 'jump') this.position = (this._position + 1) % (this._maxPosition + 1);
     else if (this.loop === 'continue') error('Not implemented yet');
   };
 
   private onGoPrev = (): void => {
+    console.log(this.loop);
     if (this.loop === 'none') this.position = Math.max(this._position - 1, 0);
     else if (this.loop === 'jump')
       this.position = (this._position + this._maxPosition) % (this._maxPosition + 1);
