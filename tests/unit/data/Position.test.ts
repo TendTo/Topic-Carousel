@@ -4,14 +4,14 @@ import { spy } from 'sinon';
 import { EventManager } from '@topic-carousel/event';
 
 describe('Position', function () {
-  const defaultMaxPos = 10;
-  const initialPosition = defaultMaxPos / 2;
+  const maxPosition = 10;
+  const initialPosition = maxPosition / 2;
   let eventManager: EventManager;
   let position: Position;
 
   beforeEach(function () {
     eventManager = new EventManager();
-    position = new Position(eventManager, defaultMaxPos, { initialPosition });
+    position = new Position(eventManager, { maxPosition, initialPosition });
     eventManager.emit('setup');
     eventManager.emit('init');
   });
@@ -21,39 +21,37 @@ describe('Position', function () {
   });
 
   it('should be created', function () {
-    expect(new Position(eventManager, 100)).to.be.ok;
+    expect(new Position(eventManager)).to.be.ok;
   });
 
   it('should have the correct default setup', function () {
-    expect(position.maxPosition).to.equal(defaultMaxPos);
+    expect(position.maxPosition).to.equal(maxPosition);
     expect(position.position).to.equal(initialPosition);
     expect(position.loop).to.equal('none');
   });
 
   it('should have the correct setup with custom data', function () {
     const loop = 'none';
-    const initialPosition = defaultMaxPos / 2;
-    const position = new Position(eventManager, defaultMaxPos, { loop, initialPosition });
-    expect(position.maxPosition).to.equal(defaultMaxPos);
+    const position = new Position(eventManager, { maxPosition, loop, initialPosition });
+    expect(position.maxPosition).to.equal(maxPosition);
     expect(position.position).to.equal(initialPosition);
     expect(position.loop).to.equal(loop);
   });
 
   it('should clamp starting position too high', function () {
-    const initialPosition = defaultMaxPos + 1;
-    const position = new Position(eventManager, defaultMaxPos, { initialPosition });
-    expect(position.position).to.equal(defaultMaxPos);
+    const initialPosition = maxPosition + 1;
+    const position = new Position(eventManager, { maxPosition, initialPosition });
+    expect(position.position).to.equal(maxPosition);
   });
 
   it('should clamp starting position too low', function () {
     const initialPosition = -1;
-    const position = new Position(eventManager, defaultMaxPos, { initialPosition });
+    const position = new Position(eventManager, { maxPosition, initialPosition });
     expect(position.position).to.equal(0);
   });
 
   it('should go to the next position', function () {
     const listener = spy();
-    const initialPosition = defaultMaxPos / 2;
     eventManager.on('positionChange', listener);
     eventManager.emit('goNext');
     expect(position.position).to.equal(initialPosition + 1);
