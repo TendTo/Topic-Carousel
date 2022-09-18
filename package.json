@@ -1,6 +1,6 @@
 {
   "name": "topic-carousel",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "description": "Carousel with infinite scroll with the ability to filter items through topics",
   "author": "TendTo",
   "license": "MIT",

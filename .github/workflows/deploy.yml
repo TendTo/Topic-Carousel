@@ -75,10 +75,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      # The publication to the npm registry is temporarily disabled
-      # - uses: JS-DevTools/npm-publish@v1
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
 
   docs:
     needs: [publish]
@@ -93,6 +92,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Install sass
+        run: npm install sass
+
+      - name: Compile SCSS files into CSS files
+        run: |
+          mkdir public/css
+          npx sass public/scss/:public/css
 
       - name: Build
         run: npm run docs
