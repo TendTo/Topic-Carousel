@@ -1,0 +1,80 @@
+@mixin flex(
+	$direction: row,
+	$wrap: nowrap,
+	$justify-content: flex-start,
+	$align-items: stretch,
+	$align-content: stretch
+) {
+	align-content: $align-content;
+	align-items: $align-items;
+	display: flex;
+	flex-flow: $direction $wrap;
+	justify-content: $justify-content;
+}
+
+@mixin grid($columns: repeat(auto-fit, minmax(200px, 1fr))) {
+	display: grid;
+	grid-auto-flow: dense;
+	grid-auto-rows: minmax(100px, auto);
+	grid-gap: 1rem;
+	grid-template-columns: $columns;
+	place-content: stretch stretch;
+	place-items: stretch stretch;
+}
+
+// Small
+@mixin sm {
+	@media (max-width: #{$breakpoint-responsive-phablet}) {
+		@content;
+	}
+}
+
+// Medium
+@mixin md {
+	@media (min-width: #{$breakpoint-responsive-phablet}) and (max-width: #{$breakpoint-responsive-tablet}) {
+		@content;
+	}
+}
+
+// Large
+@mixin lg {
+	@media (min-width: #{$breakpoint-responsive-tablet}) {
+		@content;
+	}
+}
+
+@mixin column-layout($columns: 1) {
+	@if $columns == 1 {
+		.tc-items-container {
+			padding: 0;
+		}
+
+		.tc-topics-container {
+			display: none;
+		}
+
+		.dropdown-tn {
+			display: block;
+		}
+
+		.tc-arrows {
+			top: 0;
+			width: 80px;
+		}
+
+		.tc-item {
+			padding: 0;
+			width: 100%;
+		}
+
+		.tc-title-container {
+			align-items: flex-start;
+			flex-flow: column nowrap;
+		}
+
+	} @else if $columns == 3 {
+		.tc-item {
+			width: 33%;
+		}
+	}
+}

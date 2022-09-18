@@ -1,0 +1,237 @@
+@import 'partials/config';
+@import 'partials/mixins';
+@import 'partials/utility';
+
+* {
+  box-sizing: border-box;
+}
+
+/** Card */
+#topic-carousel {
+  box-shadow: 0 0 2px $grey-lighten;
+  font-family: $font-family-2;
+
+  &::before {
+    content: 'sm';
+    display: none;
+    visibility: hidden;
+
+    @include sm {
+      content: 'sm';
+    }
+
+    @include md {
+      content: 'md';
+    }
+
+    @include lg {
+      content: 'lg';
+    }
+  }
+
+  .tc-title-container {
+    @include flex($align-items: center, $align-content: normal, $justify-content: space-between);
+
+    background-color: #fff;
+    border-radius: 4px 4px 0 0;
+    height: fit-content;
+    padding: 0 $medium;
+  }
+
+  .tc-title {
+    color: $grey-darken;
+    font-family: $font-family-1;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 32px;
+    margin-bottom: $medium;
+    margin-top: $medium;
+    text-align: left;
+  }
+
+  .tc-content {
+    background-color: $primary;
+    border-radius: 0 0 4px 4px;
+    position: relative;
+  }
+}
+
+/** Topic-Badges */
+.tc-topics-container {
+  display: block;
+  margin-left: 14px;
+  margin-right: 14px;
+  overflow-x: hidden;
+  padding-top: 18px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tc-topics {
+    @include flex($align-items: center, $align-content: normal);
+
+    column-gap: $small;
+  }
+
+  .tc-topic {
+    border: 1px solid $primary-lighten;
+    border-radius: 15px;
+    color: $white;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 24px;
+    padding: 4px $small;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .tc-topic--active {
+    background-color: $primary-lighten;
+  }
+}
+
+/** Topic-Dropdown */
+.tc-dropdown {
+  display: none;
+  height: 40px;
+  margin-left: 18px;
+  position: relative;
+}
+
+.tc-dropdown-content {
+  background-color: $white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px #00000029;
+  color: $grey-darken;
+  display: none;
+  font-size: 14px;
+  line-height: 24px;
+  padding: $small;
+  padding-right: $medium;
+  position: absolute;
+  row-gap: $small;
+  width: fit-content;
+  z-index: 10;
+
+  &:hover {
+    @include flex($direction: column, $justify-content: flex-start);
+  }
+}
+
+.checkbox-tn[type='checkbox']:checked {
+  + span {
+    font-weight: 700;
+  }
+}
+
+.tc-dropdown-btn {
+  @include flex($direction: row, $align-items: center);
+
+  color: $white;
+  cursor: pointer;
+  font-size: 14px;
+  height: 100%;
+  line-height: 24px;
+  user-select: none;
+  width: fit-content;
+
+  &:hover {
+    ~ .tc-dropdown-content {
+      @include flex($direction: column, $justify-content: flex-start);
+    }
+  }
+
+  > i {
+    width: fit-content;
+  }
+}
+
+/** Nav arrows */
+.tc-arrows {
+  @include flex($justify-content: space-between, $align-content: stretch);
+
+  background: $nav-container 0% 0% no-repeat padding-box;
+  height: 48px;
+  position: absolute;
+  right: 0;
+  top: 68px;
+  width: 100%;
+  z-index: 1;
+}
+
+.tc-arrow {
+  background-color: $accent;
+  cursor: default;
+  opacity: 1;
+  user-select: none;
+  z-index: 1;
+
+  > i {
+    color: $white;
+    font-size: 40px;
+  }
+}
+
+/** Items */
+.tc-items-container {
+  overflow-x: hidden;
+  padding: $medium $small;
+  width: 100%;
+}
+
+.tc-items {
+  @include flex($direction: row, $align-content: stretch);
+
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+
+.tc-item {
+  flex-shrink: 0;
+  padding: 0 $small;
+  width: 50%;
+
+  .tc-item-content {
+    padding: $small;
+    background-color: gray;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    line-height: 400px;
+  }
+}
+
+#unused {
+  @include sm {
+    &[data-sm='1'] {
+      @include column-layout(1);
+    }
+
+    &[data-sm='3'] {
+      @include column-layout(3);
+    }
+  }
+
+  @include md {
+    &[data-md='1'] {
+      @include column-layout(1);
+    }
+
+    &[data-md='3'] {
+      @include column-layout(3);
+    }
+  }
+
+  @include lg {
+    &[data-lg='1'] {
+      @include column-layout(1);
+    }
+
+    &[data-lg='3'] {
+      @include column-layout(3);
+    }
+  }
+}
