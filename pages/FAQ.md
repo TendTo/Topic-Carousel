@@ -15,3 +15,9 @@
   Although it would be possible to point them to the right direction, I would prefer something that works out of the box.
   For this reason, prettier and eslint configurations are in the root folder, while the others have been hidden away.</p>
 </details>
+
+<details>
+  <summary><b>How can I customize the behavior of the TopicCarousel?</b></summary>
+  <p>It depends on what your goals are. The most straight forward way is to listen or emit events from the <i>TopicCarousel.eventManager</i> object. It can be used to change the number of columns, move the items or select a topic.<br>
+  If you need even more customization, you can provide your own components and hook them up to the <i>eventManager</i>.</p>
+</details>

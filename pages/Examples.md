@@ -52,8 +52,10 @@
 </div>
 
 <script>
-    const carousel = new TopicCarousel.TopicCarousel({ loop: 'jump' });
-    carousel.init();
+    window.addEventListener('DOMContentLoaded', () => {
+      var carousel = new TopicCarousel.TopicCarousel();
+      carousel.init();
+    });
 </script>
 
 ### Javascript
@@ -61,15 +63,17 @@
 ```html
 <body>
   <!-- ... -->
+  <!-- Include library script -->
   <script src="https://unpkg.com/topic-carousel/dist/bundle/topic-carousel.min.js"></script>
-  <!-- Custom script -->
 </body>
 ```
 
 ```js
-// Custom script
-const carousel = new TopicCarousel.TopicCarousel();
-carousel.init();
+// Add a custom script
+window.addEventListener('DOMContentLoaded', () => {
+  var carousel = new TopicCarousel.TopicCarousel();
+  carousel.init();
+});
 ```
 
 ### Html
