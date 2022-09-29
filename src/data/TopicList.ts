@@ -1,6 +1,7 @@
 import { EventManager, EventClass } from '@topic-carousel/event';
 import { TopicElement } from '@topic-carousel/element';
 import { Topic } from './Topic';
+import { error } from '@topic-carousel/util';
 
 type OnTopicChangeCallback = (topic: Topic | null, topicList: TopicList) => void;
 
@@ -59,7 +60,7 @@ export class TopicList extends EventClass {
 
   public removeTopic(id: string | number): void {
     const topic = this.getTopic(id);
-    if (!topic) throw new Error(`Topic ${id} not found`);
+    if (!topic) error(`Topic ${id} not found`);
     this._topics = this._topics.filter((topic) => topic.id !== id);
     this._nActive -= topic.isActive ? 1 : 0;
     this.onTopicChange();
@@ -98,14 +99,14 @@ export class TopicList extends EventClass {
 
   public toggleTopic(id: string | number): void {
     const topic = this.getTopic(id);
-    if (!topic) throw new Error(`Topic ${id} not found`);
+    if (!topic) error(`Topic ${id} not found`);
     topic.toggleActive();
     this.onTopicChange(topic);
   }
 
   public setTopicActive(id: string | number, isActive: boolean): void {
     const topic = this.getTopic(id);
-    if (!topic) throw new Error(`Topic ${id} not found`);
+    if (!topic) error(`Topic ${id} not found`);
     if (topic.isActive !== isActive) {
       topic.isActive = isActive;
       this.onTopicChange(topic);

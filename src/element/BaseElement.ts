@@ -1,4 +1,5 @@
 import { EventManager, EventClass } from '@topic-carousel/event';
+import { error } from '@topic-carousel/util';
 
 /** Options for the initialization of an Element object */
 export type ElementOptions = {
@@ -65,9 +66,8 @@ export class BaseElement extends EventClass {
     super(eventManager);
     if (typeof elementOrSelector === 'string') {
       const element = document.querySelector(elementOrSelector);
-      if (!(element instanceof HTMLElement)) {
-        throw new Error(`Topic button with selector ${elementOrSelector} not found`);
-      }
+      if (!(element instanceof HTMLElement))
+        error(`Topic button with selector ${elementOrSelector} not found`);
       this.element = element;
     } else {
       this.element = elementOrSelector;
