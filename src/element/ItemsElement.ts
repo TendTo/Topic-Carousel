@@ -11,10 +11,10 @@ export type ItemsElementEvents = {
   updateItems: (itemsElement: ItemsElement) => void;
 };
 
-export class ItemsElement extends BaseElement implements IEventClass, IInit {
-  private _items: ItemElement[] = [];
-  private itemWidth = INVALID_NUMBER_VALUE;
-  private lastPosition = INVALID_NUMBER_VALUE;
+export abstract class ItemsElement extends BaseElement implements IEventClass, IInit {
+  protected _items: ItemElement[] = [];
+  protected itemWidth = INVALID_NUMBER_VALUE;
+  protected lastPosition = INVALID_NUMBER_VALUE;
 
   constructor(
     eventManager: EventManager,
@@ -24,6 +24,7 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
   ) {
     super(eventManager, selector, options);
     this.items = items;
+    items.forEach((item, i) => (item.order = i));
   }
 
   public override setupEvents(): void {
@@ -38,19 +39,11 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
     this.eventManager.emit('updateItems', this);
   }
 
-  private onResize = (): void => {
-    const item = this._items.find((item) => item.isActive || item.overrideIsActive);
-    this.itemWidth = item?.width ?? INVALID_NUMBER_VALUE;
-    if (this.lastPosition !== INVALID_NUMBER_VALUE) this.onPositionChange(this.lastPosition);
-  };
+  protected abstract onResize(): void;
 
-  private onPositionChange = (prevPosition: number, position?: Position) => {
-    const pos = position?.position ?? prevPosition;
-    this.lastPosition = pos;
-    this.translate(-pos * this.itemWidth, 0);
-  };
+  protected abstract onPositionChange(prevPosition: number, position?: Position): void;
 
-  private onTopicChange = (topic: Topic | null, topicList: TopicList) => {
+  protected onTopicChange = (topic: Topic | null, topicList: TopicList) => {
     this._items.forEach((item) => {
       item.overrideIsActive = false;
       if (topicList.areAllActive) {
@@ -103,14 +96,14 @@ export class ItemsElement extends BaseElement implements IEventClass, IInit {
     this.eventManager.emit('updateItems', this);
   }
 
-  private translate(x: number, y: number): void {
+  protected translate(x: number, y: number): void {
     window.requestAnimationFrame(() => {
       this.element.style.transition = this.elementOptions.transitionTransform;
       this.element.style.transform = `translate(${x}px, ${y}px)`;
     });
   }
 
-  private teleport(x: number, y: number): void {
+  protected teleport(x: number, y: number): void {
     this.element.style.transition = this.elementOptions.transitionTeleport;
     this.element.style.transform = `translate(${x}px, ${y}px)`;
   }

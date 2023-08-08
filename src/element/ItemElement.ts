@@ -23,6 +23,14 @@ export class ItemElement extends BaseElement {
     return this.element.getBoundingClientRect().height;
   }
 
+  public get order(): number {
+    return parseInt(this.element.style.order);
+  }
+
+  public set order(value: number) {
+    this.element.style.order = value.toString();
+  }
+
   public override setupEvents(): void {
     if (this.elementOptions.autoSetItemsWidth)
       this.eventManager.on('updateNCols', this.onUpdateNCols);

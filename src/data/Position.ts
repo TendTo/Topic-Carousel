@@ -1,6 +1,6 @@
 import { ItemsElement } from '@topic-carousel/element';
 import { EventManager, EventClass } from '@topic-carousel/event';
-import { clamp, error } from '@topic-carousel/util';
+import { clamp } from '@topic-carousel/util';
 
 type LoopType = 'none' | 'jump' | 'continue';
 
@@ -59,14 +59,14 @@ export class Position extends EventClass {
   private onGoNext = (): void => {
     if (this.loop === 'none') this.position = Math.min(this._position + 1, this._maxPosition);
     else if (this.loop === 'jump') this.position = (this._position + 1) % (this._maxPosition + 1);
-    else if (this.loop === 'continue') error('Not implemented yet');
+    else if (this.loop === 'continue') this.position++;
   };
 
   private onGoPrev = (): void => {
     if (this.loop === 'none') this.position = Math.max(this._position - 1, 0);
     else if (this.loop === 'jump')
       this.position = (this._position + this._maxPosition) % (this._maxPosition + 1);
-    else if (this.loop === 'continue') error('Not implemented yet');
+    else if (this.loop === 'continue') this.position--;
   };
 
   public get maxPosition(): number {
@@ -84,7 +84,8 @@ export class Position extends EventClass {
 
   public set position(position: number) {
     const prevPosition = this._position;
-    this._position = clamp(position, 0, this._maxPosition);
+    this._position = position;
+    console.log(position);
     this.eventManager.emit('positionChange', prevPosition, this);
   }
 
